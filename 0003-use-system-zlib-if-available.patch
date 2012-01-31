@@ -1,0 +1,67 @@
+From d369d18ac9e8f249a6bfc4ed70cdeaf6a861e931 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
+Date: Wed, 18 Jan 2012 20:39:05 +0100
+Subject: [PATCH 03/11] use system zlib if available
+
+---
+ CMakeLists.txt            |    6 +++++-
+ src/zipios/CMakeLists.txt |   16 +++++++++++++---
+ 2 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 397f138..b627129 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,11 +42,15 @@ set( CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.6.sdk" )
+ # Universal builds for mac
+ set( CMAKE_OSX_ARCHITECTURES "i386;x86_64" )
+ 
++find_package( ZLIB )
++
+ # The parsing order is significant!
+ add_subdirectory( src/BoostParts )
+ add_subdirectory( src/Xerces )
+ add_subdirectory( src/XercesExtensions )
+-add_subdirectory( src/zlib )
++if( NOT ZLIB_FOUND )
++    add_subdirectory( src/zlib )
++endif()
+ add_subdirectory( src/zipios )
+ add_subdirectory( src/googlemock )
+ add_subdirectory( src/FlightCrew )
+diff --git a/src/zipios/CMakeLists.txt b/src/zipios/CMakeLists.txt
+index 1c135c1..9b4d039 100644
+--- a/src/zipios/CMakeLists.txt
++++ b/src/zipios/CMakeLists.txt
+@@ -17,15 +17,25 @@ file( GLOB_RECURSE SOURCES *.cpp *.h )
+ # and the headers for the linked-to libraries
+ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
+                      ${BoostParts_SOURCE_DIR}
+-                     ${zlib_SOURCE_DIR}
+-                     ${zlib_BINARY_DIR}
+                      )
+ 
++if( ZLIB_FOUND )
++    include_directories( ${ZLIB_INCLUDE_DIRS} )
++else()
++    include_directories( ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR} )
++endif()
++
+ link_directories ( ${PROJECT_BINARY_DIR}/lib )
+ 
+ add_library( ${PROJECT_NAME} ${SOURCES} )
+ 
+-target_link_libraries( ${PROJECT_NAME} zlib BoostParts )
++target_link_libraries( ${PROJECT_NAME} BoostParts )
++if( ZLIB_FOUND )
++    target_link_libraries( ${PROJECT_NAME} ${ZLIB_LIBRARIES} )
++else()
++    target_link_libraries( ${PROJECT_NAME} zlib )
++endif()
++
+ 
+ #############################################################################
+ 
+-- 
+1.7.7.4
+

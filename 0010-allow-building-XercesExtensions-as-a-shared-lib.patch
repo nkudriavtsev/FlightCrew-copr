@@ -1,0 +1,116 @@
+From 77bb2faf427049a5edda9060d17ab3517f736fdd Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 18 Jan 2012 20:44:30 +0100
+Subject: [PATCH 10/11] allow building XercesExtensions as a shared lib
+
+---
+ src/XercesExtensions/CMakeLists.txt             |   27 ++++++++++--
+ src/XercesExtensions/FindXercesExtensions.cmake |   49 +++++++++++++++++++++++
+ 2 files changed, 71 insertions(+), 5 deletions(-)
+ create mode 100644 src/XercesExtensions/FindXercesExtensions.cmake
+
+diff --git a/src/XercesExtensions/CMakeLists.txt b/src/XercesExtensions/CMakeLists.txt
+index 98de34b..ab5fadf 100644
+--- a/src/XercesExtensions/CMakeLists.txt
++++ b/src/XercesExtensions/CMakeLists.txt
+@@ -21,7 +21,19 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
+ 
+ link_directories ( ${PROJECT_BINARY_DIR}/lib ) 
+ 
+-add_library( ${PROJECT_NAME} ${SOURCES} )
++if( BUILD_SHARED_XE )
++    add_library( ${PROJECT_NAME} SHARED ${SOURCES} )
++    set_target_properties( ${PROJECT_NAME} PROPERTIES
++        VERSION "${FLIGHTCREW_LIBVERSION}"
++        SOVERSION "${FLIGHTCREW_SOVERSION}"
++        OUTPUT_NAME "${PROJECT_NAME}"
++    )
++else()
++    add_library( ${PROJECT_NAME} ${SOURCES} )
++    if( UNIX AND BUILD_SHARED_FC )
++        add_definitions(-fPIC)
++    endif()
++endif()
+ 
+ target_link_libraries( ${PROJECT_NAME} ${XERCES_LIBRARIES} )
+ 
+@@ -48,12 +60,17 @@ elseif( CMAKE_COMPILER_IS_GNUCXX )
+     add_definitions( -Wall )
+ endif()
+ 
+-if( UNIX AND BUILD_SHARED_FC )
+-    add_definitions(-fPIC)
+-endif()
+-
+ # needed for correct Xerces header inclusion
+ if( NOT XERCES_FOUND )
+     add_definitions( -DXERCES_STATIC_LIBRARY )
+ endif()
+ 
++if( BUILD_SHARED_XE AND UNIX AND NOT APPLE )
++    install( TARGETS ${PROJECT_NAME}
++        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}
++        ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}
++     )
++    file( GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.h" )
++    install( FILES ${files} DESTINATION ${INCLUDE_INSTALL_DIR}/${PROJECT_NAME} )
++    install( FILES ${CMAKE_CURRENT_SOURCE_DIR}/FindXercesExtensions.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/cmake/${PROJECT_NAME} )
++endif()
+diff --git a/src/XercesExtensions/FindXercesExtensions.cmake b/src/XercesExtensions/FindXercesExtensions.cmake
+new file mode 100644
+index 0000000..4f4f8aa
+--- /dev/null
++++ b/src/XercesExtensions/FindXercesExtensions.cmake
+@@ -0,0 +1,49 @@
++# Try to find the XercesExtensions lib
++# Once done this will define:
++#
++#  XERCESEXTENSIONS_FOUND - system has XercesExtensions
++#  XERCESEXTENSIONS_INCLUDE_DIRS - the XercesExtensions include directory
++#  XERCESEXTENSIONS_LIBRARIES - The libraries needed to use XercesExtensions
++#
++# Copyright (c) 2011, Dan Horák <dan[at]danny.cz>
++# Copyright (c) 2012, Hans de Goede <hdegoede@redhat.com>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
++
++
++if (XERCESEXTENSIONS_INCLUDE_DIRS)
++  # Already in cache, be silent
++  set(XERCESEXTENSIONS_FIND_QUIETLY TRUE)
++endif (XERCESEXTENSIONS_INCLUDE_DIRS)
++
++#FIND_PATH(XERCESEXTENSIONS_INCLUDE_DIRS XercesInit.h)
++
++if( NOT XERCESEXTENSIONS_INCLUDE_DIRS )
++    find_path(XERCESEXTENSIONS_INCLUDE_DIRS XercesInit.h PATH_SUFFIXES XercesExtensions)
++    #now XercesInit.h was inside a XercesExtensions subdirectory so we need to
++    #add that to the include dir
++    set(XERCESEXTENSIONS_INCLUDE_DIRS ${XERCESEXTENSIONS_INCLUDE_DIRS}/XercesExtensions CACHE PATH "XercesExtensions include directory")
++endif( NOT XERCESEXTENSIONS_INCLUDE_DIRS )
++
++
++FIND_LIBRARY(XERCESEXTENSIONS_LIBRARIES NAMES XercesExtensions)
++
++if (XERCESEXTENSIONS_INCLUDE_DIRS AND XERCESEXTENSIONS_LIBRARIES)
++   set(XERCESEXTENSIONS_FOUND TRUE)
++endif (XERCESEXTENSIONS_INCLUDE_DIRS AND XERCESEXTENSIONS_LIBRARIES)
++
++
++if (XERCESEXTENSIONS_FOUND)
++   if (NOT XERCESEXTENSIONS_FIND_QUIETLY)
++      message(STATUS "Found XercesExtensions: ${XERCESEXTENSIONS_LIBRARIES}")
++   endif (NOT XERCESEXTENSIONS_FIND_QUIETLY)
++else (XERCESEXTENSIONS_FOUND)
++    if (XERCESEXTENSIONS_FIND_REQUIRED)
++      message(FATAL_ERROR "Could NOT find XercesExtensions")
++    else (XERCESEXTENSIONS_FIND_REQUIRED)
++      message(STATUS "Could NOT find XercesExtensions")
++    endif (XERCESEXTENSIONS_FIND_REQUIRED)
++endif (XERCESEXTENSIONS_FOUND)
++
++MARK_AS_ADVANCED(XERCESEXTENSIONS_INCLUDE_DIRS XERCESEXTENSIONS_LIBRARIES)
+-- 
+1.7.7.4
+
