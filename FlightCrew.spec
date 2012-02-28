@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.7.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        EPUB validation library
 
 Group:          System Environment/Libraries
@@ -98,6 +98,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-3
+- Rebuilt for c++ ABI breakage
+
 * Thu Jan 12 2012 Hans de Goede <hdegoede@redhat.com> - 0.7.2-2
 - Make -devel package Requires on main package include isa
 - Drop buildroot and defattr boilerplate (no longer needed with recent rpm)
