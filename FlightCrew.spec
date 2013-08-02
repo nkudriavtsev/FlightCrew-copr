@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.7.2
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        EPUB validation library
 
 Group:          System Environment/Libraries
@@ -98,6 +98,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 02 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
 * Sat Jul 27 2013 pmachata@redhat.com - 0.7.2-8
 - Rebuild for boost 1.54.0
 
