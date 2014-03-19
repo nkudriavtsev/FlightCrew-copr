@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.7.2
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        EPUB validation library
 
 Group:          System Environment/Libraries
@@ -17,12 +17,14 @@ Patch7:         0007-install-FlightCrew-library-and-headers.patch
 Patch8:         0008-don-t-build-googlemock-when-NO_TEST_EXE-is-specified.patch
 Patch9:         0009-Add-a-FindFlightCrew.cmake-cmake-module.patch
 Patch10:        0010-allow-building-XercesExtensions-as-a-shared-lib.patch
-Patch11:        0011-allow-building-zipios-as-a-shared-lib.patch
+Patch11:        0011-move-zipextraction-under-FlightCrew.patch
+Patch12:        0012-use-system-zipios-library-if-available.patch
 
 BuildRequires:  cmake
 BuildRequires:  zlib-devel
 BuildRequires:  boost-devel
 BuildRequires:  xerces-c-devel >= 3.1
+BuildRequires:  zipios++-devel
 
 
 %description
@@ -52,6 +54,7 @@ developing applications that use %{name}.
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
 
 # Fix EOL encoding for %%doc
 for i in COPYING*.txt ChangeLog.txt; do
@@ -60,7 +63,7 @@ for i in COPYING*.txt ChangeLog.txt; do
 done
 
 # remove unbundled stuff
-rm -rf src/BoostParts src/zlib src/Xerces
+rm -rf src/BoostParts src/zlib src/Xerces src/zipios
 # remove test framework
 rm -rf src/googlemock
 
@@ -98,6 +101,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Mar 19 2014 Dan Horák <dan[at]danny.cz> - 0.7.2-10
+- Build with system zipios++ library (#1077716)
+
 * Fri Aug 02 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.7.2-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 

@@ -1,15 +1,15 @@
-From 3b3d9e316248662f7ba27359149a34adab8e16ef Mon Sep 17 00:00:00 2001
+From 25677e82473c7ccca823358dc1c133e612a7080f Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
 Date: Wed, 18 Jan 2012 20:38:14 +0100
-Subject: [PATCH 01/11] add versioning information to the shared library
+Subject: [PATCH 01/12] add versioning information to the shared library
 
 ---
- CMakeLists.txt                |    2 ++
- src/FlightCrew/CMakeLists.txt |    5 +++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
+ CMakeLists.txt                | 2 ++
+ src/FlightCrew/CMakeLists.txt | 5 +++++
+ 2 files changed, 7 insertions(+)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 30a6a76..397f138 100644
+index 30a6a76..5536c43 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -20,6 +20,8 @@ set( FLIGHTCREW_MAJOR_VERSION 0 )
@@ -22,7 +22,7 @@ index 30a6a76..397f138 100644
  # Check if platform is 64 bit
  if( NOT APPLE )
 diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
-index 77538e7..5a5c62b 100644
+index 77538e7..4ce09e2 100644
 --- a/src/FlightCrew/CMakeLists.txt
 +++ b/src/FlightCrew/CMakeLists.txt
 @@ -78,6 +78,11 @@ if( BUILD_SHARED_FC )
@@ -38,5 +38,5 @@ index 77538e7..5a5c62b 100644
      add_library( ${PROJECT_NAME} ${SOURCES} )
  endif()
 -- 
-1.7.7.4
+1.8.5.3
 

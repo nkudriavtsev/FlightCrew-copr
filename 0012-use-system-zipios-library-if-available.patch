@@ -1,0 +1,83 @@
+From 0f6db6dbf37ffc27b73f347df31344f606a31127 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 19 Mar 2014 11:32:54 +0100
+Subject: [PATCH 12/12] use system zipios++ library if available
+
+---
+ CMakeLists.txt                        | 16 +++++++++++++++-
+ src/FlightCrew/CMakeLists.txt         |  4 ++--
+ src/FlightCrew/Misc/zipextraction.cpp |  2 +-
+ 3 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 301ac38..13405dd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -47,6 +47,13 @@ find_package( ZLIB )
+ find_package( PkgConfig )
+ pkg_check_modules( XERCES xerces-c>=3.1 )
+ 
++find_library(ZIPIOS_LIBRARY zipios)
++find_path(ZIPIOS_INCLUDES zipios++/zipios-config.h)
++if(ZIPIOS_LIBRARY AND ZIPIOS_INCLUDES)
++    message(STATUS "Found zipios++ library and headers.")
++    set( ZIPIOS_FOUND TRUE )
++endif()
++
+ # The parsing order is significant!
+ if( Boost_FOUND )
+     set( BOOST_LIBS ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} )
+@@ -65,7 +72,14 @@ add_subdirectory( src/XercesExtensions )
+ if( NOT ZLIB_FOUND )
+     add_subdirectory( src/zlib )
+ endif()
+-add_subdirectory( src/zipios )
++if( NOT ZIPIOS_FOUND )
++    add_subdirectory( src/zipios )
++    set( ZIPIOS_LIBS zipios )
++    set( ZIPIOS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipios )
++else()
++    set( ZIPIOS_LIBS ${ZIPIOS_LIBRARY} )
++    set( ZIPIOS_INCLUDE_DIRS ${ZIPIOS_INCLUDES} )
++endif()
+ if( NOT NO_TEST_EXE )
+     add_subdirectory( src/googlemock )
+ endif()
+diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
+index d4f322c..ab19c1c 100644
+--- a/src/FlightCrew/CMakeLists.txt
++++ b/src/FlightCrew/CMakeLists.txt
+@@ -64,7 +64,7 @@ precompiled_header( SOURCES ALL_INCLUDES ${GCC_PCH_TARGET} ${PCH_NAME} )
+ # and the headers for the linked-to libraries
+ include_directories( ${CMAKE_CURRENT_BINARY_DIR}
+                      ${CMAKE_CURRENT_SOURCE_DIR}
+-                     ../zipios 
++                     ${ZIPIOS_INCLUDE_DIRS}
+                      ${BOOST_INCLUDE_DIRS} 
+                      ${XERCES_INCLUDE_DIRS}
+                      ../XercesExtensions
+@@ -87,7 +87,7 @@ else()
+     add_library( ${PROJECT_NAME} ${SOURCES} )
+ endif()
+ 
+-target_link_libraries( ${PROJECT_NAME} zipios ${BOOST_LIBS} XercesExtensions )
++target_link_libraries( ${PROJECT_NAME} ${ZIPIOS_LIBS} ${BOOST_LIBS} XercesExtensions )
+ 
+ #############################################################################
+ 
+diff --git a/src/FlightCrew/Misc/zipextraction.cpp b/src/FlightCrew/Misc/zipextraction.cpp
+index 45dc494..e856b01 100644
+--- a/src/FlightCrew/Misc/zipextraction.cpp
++++ b/src/FlightCrew/Misc/zipextraction.cpp
+@@ -60,7 +60,7 @@ void CreateFilepath( const fs::path &filepath )
+ 
+ void ExtractZipToFolder( const fs::path &path_to_zip, const fs::path &path_to_folder )
+ {
+-    ZipFile zip( path_to_zip );
++    ZipFile zip( path_to_zip.string() );
+ 
+     ConstEntries entries = zip.entries();
+     for ( ConstEntries::iterator it = entries.begin(); it != entries.end(); ++it )
+-- 
+1.8.5.3
+

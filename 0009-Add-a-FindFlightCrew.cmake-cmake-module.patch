@@ -1,16 +1,16 @@
-From 3ddd72318be7119768b9b471c283aedd7d616048 Mon Sep 17 00:00:00 2001
+From a1d619118bd9a67c81395ea2b8a163a327e505f3 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Wed, 18 Jan 2012 20:43:39 +0100
-Subject: [PATCH 09/11] Add a FindFlightCrew.cmake cmake module
+Subject: [PATCH 09/12] Add a FindFlightCrew.cmake cmake module
 
 ---
- src/FlightCrew/CMakeLists.txt       |    1 +
- src/FlightCrew/FindFlightCrew.cmake |   49 +++++++++++++++++++++++++++++++++++
- 2 files changed, 50 insertions(+), 0 deletions(-)
+ src/FlightCrew/CMakeLists.txt       |  1 +
+ src/FlightCrew/FindFlightCrew.cmake | 49 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
  create mode 100644 src/FlightCrew/FindFlightCrew.cmake
 
 diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
-index 9214c85..a294b7f 100644
+index 455b0c8..d4f322c 100644
 --- a/src/FlightCrew/CMakeLists.txt
 +++ b/src/FlightCrew/CMakeLists.txt
 @@ -148,4 +148,5 @@ if( UNIX AND NOT APPLE )
@@ -75,5 +75,5 @@ index 0000000..d0f5102
 +
 +MARK_AS_ADVANCED(FLIGHTCREW_INCLUDE_DIRS FLIGHTCREW_LIBRARIES)
 -- 
-1.7.7.4
+1.8.5.3
 

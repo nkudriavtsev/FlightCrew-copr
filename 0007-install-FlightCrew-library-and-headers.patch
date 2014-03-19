@@ -1,17 +1,17 @@
-From 2df0d625ba8ebb28f5c4702bef096a917830278f Mon Sep 17 00:00:00 2001
+From f5ca4c29628f2df470fef6d7036b8340b623ff30 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
 Date: Wed, 18 Jan 2012 20:41:42 +0100
-Subject: [PATCH 07/11] install FlightCrew library and headers
+Subject: [PATCH 07/12] install FlightCrew library and headers
 
 With minor changes by Hans de Goede:
 -Also install the headers under src/FlightCrew/Misc and
  src/FlightCrew/Validators
 ---
- src/FlightCrew/CMakeLists.txt |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+ src/FlightCrew/CMakeLists.txt | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
 diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
-index e86fc19..9214c85 100644
+index 9b3ecbf..455b0c8 100644
 --- a/src/FlightCrew/CMakeLists.txt
 +++ b/src/FlightCrew/CMakeLists.txt
 @@ -135,3 +135,17 @@ endif()
@@ -33,5 +33,5 @@ index e86fc19..9214c85 100644
 +    install( FILES ${CMAKE_CURRENT_SOURCE_DIR}/../XercesExtensions/NodeLocationInfo.h DESTINATION ${INCLUDE_INSTALL_DIR}/${PROJECT_NAME} )
 +endif()
 -- 
-1.7.7.4
+1.8.5.3
 

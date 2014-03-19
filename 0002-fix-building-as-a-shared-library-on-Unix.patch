@@ -1,18 +1,18 @@
-From d6742d2745f96058caab9d60d836714ac9a0d02c Mon Sep 17 00:00:00 2001
+From 7c95e46b96e73ca3c8f748825ba02cc518925107 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
 Date: Wed, 18 Jan 2012 20:38:46 +0100
-Subject: [PATCH 02/11] fix building as a shared library on Unix
+Subject: [PATCH 02/12] fix building as a shared library on Unix
 
 ---
- src/BoostParts/CMakeLists.txt       |    4 ++++
- src/Xerces/CMakeLists.txt           |    3 +++
- src/XercesExtensions/CMakeLists.txt |    4 ++++
- src/zipios/CMakeLists.txt           |    3 +++
- src/zlib/CMakeLists.txt             |    3 +++
- 5 files changed, 17 insertions(+), 0 deletions(-)
+ src/BoostParts/CMakeLists.txt       | 4 ++++
+ src/Xerces/CMakeLists.txt           | 3 +++
+ src/XercesExtensions/CMakeLists.txt | 4 ++++
+ src/zipios/CMakeLists.txt           | 3 +++
+ src/zlib/CMakeLists.txt             | 3 +++
+ 5 files changed, 17 insertions(+)
 
 diff --git a/src/BoostParts/CMakeLists.txt b/src/BoostParts/CMakeLists.txt
-index f22410a..4f50444 100644
+index f22410a..a34893c 100644
 --- a/src/BoostParts/CMakeLists.txt
 +++ b/src/BoostParts/CMakeLists.txt
 @@ -105,3 +105,7 @@ if( MSVC )
@@ -24,7 +24,7 @@ index f22410a..4f50444 100644
 +    add_definitions(-fPIC)
 +endif()
 diff --git a/src/Xerces/CMakeLists.txt b/src/Xerces/CMakeLists.txt
-index 33ea5c3..f9e2cad 100644
+index 33ea5c3..9aa896c 100644
 --- a/src/Xerces/CMakeLists.txt
 +++ b/src/Xerces/CMakeLists.txt
 @@ -174,4 +174,7 @@ else()
@@ -36,7 +36,7 @@ index 33ea5c3..f9e2cad 100644
 +    endif()
  endif()
 diff --git a/src/XercesExtensions/CMakeLists.txt b/src/XercesExtensions/CMakeLists.txt
-index 08196e0..5a304a7 100644
+index 08196e0..96310d2 100644
 --- a/src/XercesExtensions/CMakeLists.txt
 +++ b/src/XercesExtensions/CMakeLists.txt
 @@ -48,6 +48,10 @@ elseif( CMAKE_COMPILER_IS_GNUCXX )
@@ -51,7 +51,7 @@ index 08196e0..5a304a7 100644
  add_definitions( -DXERCES_STATIC_LIBRARY )
  
 diff --git a/src/zipios/CMakeLists.txt b/src/zipios/CMakeLists.txt
-index 88fdb7d..1c135c1 100644
+index 88fdb7d..98ce793 100644
 --- a/src/zipios/CMakeLists.txt
 +++ b/src/zipios/CMakeLists.txt
 @@ -47,3 +47,6 @@ elseif( CMAKE_COMPILER_IS_GNUCXX )
@@ -75,5 +75,5 @@ index e59f844..fb2638b 100644
  
  
 -- 
-1.7.7.4
+1.8.5.3
 

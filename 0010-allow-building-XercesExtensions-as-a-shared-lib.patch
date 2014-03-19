@@ -1,16 +1,16 @@
-From 77bb2faf427049a5edda9060d17ab3517f736fdd Mon Sep 17 00:00:00 2001
+From ade66ffe050e6b183a0f6d1af8548a061ff05466 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Wed, 18 Jan 2012 20:44:30 +0100
-Subject: [PATCH 10/11] allow building XercesExtensions as a shared lib
+Subject: [PATCH 10/12] allow building XercesExtensions as a shared lib
 
 ---
- src/XercesExtensions/CMakeLists.txt             |   27 ++++++++++--
- src/XercesExtensions/FindXercesExtensions.cmake |   49 +++++++++++++++++++++++
+ src/XercesExtensions/CMakeLists.txt             | 27 +++++++++++---
+ src/XercesExtensions/FindXercesExtensions.cmake | 49 +++++++++++++++++++++++++
  2 files changed, 71 insertions(+), 5 deletions(-)
  create mode 100644 src/XercesExtensions/FindXercesExtensions.cmake
 
 diff --git a/src/XercesExtensions/CMakeLists.txt b/src/XercesExtensions/CMakeLists.txt
-index 98de34b..ab5fadf 100644
+index f272c5a..7b3d16b 100644
 --- a/src/XercesExtensions/CMakeLists.txt
 +++ b/src/XercesExtensions/CMakeLists.txt
 @@ -21,7 +21,19 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
@@ -112,5 +112,5 @@ index 0000000..4f4f8aa
 +
 +MARK_AS_ADVANCED(XERCESEXTENSIONS_INCLUDE_DIRS XERCESEXTENSIONS_LIBRARIES)
 -- 
-1.7.7.4
+1.8.5.3
 

@@ -1,16 +1,16 @@
-From cc366be2341b14a23321d93e50ccedd9a5a49282 Mon Sep 17 00:00:00 2001
+From d598cbb89d6ac518253c24213db2f6ea415b1fb3 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
 Date: Wed, 18 Jan 2012 20:41:05 +0100
-Subject: [PATCH 06/11] use system xerces-c if available
+Subject: [PATCH 06/12] use system xerces-c if available
 
 ---
- CMakeLists.txt                      |    8 +++++++-
- src/FlightCrew/CMakeLists.txt       |    8 +++++---
- src/XercesExtensions/CMakeLists.txt |    8 +++++---
+ CMakeLists.txt                      | 8 +++++++-
+ src/FlightCrew/CMakeLists.txt       | 8 +++++---
+ src/XercesExtensions/CMakeLists.txt | 8 +++++---
  3 files changed, 17 insertions(+), 7 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 21f5cc7..335f004 100644
+index 2f17b21..872ec34 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -44,6 +44,8 @@ set( CMAKE_OSX_ARCHITECTURES "i386;x86_64" )
@@ -36,7 +36,7 @@ index 21f5cc7..335f004 100644
  if( NOT ZLIB_FOUND )
      add_subdirectory( src/zlib )
 diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
-index 72c7a0b..e86fc19 100644
+index d0a33aa..9b3ecbf 100644
 --- a/src/FlightCrew/CMakeLists.txt
 +++ b/src/FlightCrew/CMakeLists.txt
 @@ -51,7 +51,7 @@ list( REMOVE_ITEM SOURCES ${to_remove} )
@@ -69,7 +69,7 @@ index 72c7a0b..e86fc19 100644
  #############################################################################
  
 diff --git a/src/XercesExtensions/CMakeLists.txt b/src/XercesExtensions/CMakeLists.txt
-index d7ac6a8..98de34b 100644
+index 1e8391f..f272c5a 100644
 --- a/src/XercesExtensions/CMakeLists.txt
 +++ b/src/XercesExtensions/CMakeLists.txt
 @@ -16,14 +16,14 @@ file( GLOB SOURCES *.cpp *.h )
@@ -99,5 +99,5 @@ index d7ac6a8..98de34b 100644
 +endif()
  
 -- 
-1.7.7.4
+1.8.5.3
 

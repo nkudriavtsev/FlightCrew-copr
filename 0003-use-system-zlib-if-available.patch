@@ -1,15 +1,15 @@
-From d369d18ac9e8f249a6bfc4ed70cdeaf6a861e931 Mon Sep 17 00:00:00 2001
+From 7d85d78ad2542c578079ba1f87c704eee026e7ee Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
 Date: Wed, 18 Jan 2012 20:39:05 +0100
-Subject: [PATCH 03/11] use system zlib if available
+Subject: [PATCH 03/12] use system zlib if available
 
 ---
- CMakeLists.txt            |    6 +++++-
- src/zipios/CMakeLists.txt |   16 +++++++++++++---
+ CMakeLists.txt            |  6 +++++-
+ src/zipios/CMakeLists.txt | 16 +++++++++++++---
  2 files changed, 18 insertions(+), 4 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 397f138..b627129 100644
+index 5536c43..b1069d7 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -42,11 +42,15 @@ set( CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.6.sdk" )
@@ -30,7 +30,7 @@ index 397f138..b627129 100644
  add_subdirectory( src/googlemock )
  add_subdirectory( src/FlightCrew )
 diff --git a/src/zipios/CMakeLists.txt b/src/zipios/CMakeLists.txt
-index 1c135c1..9b4d039 100644
+index 98ce793..96e59c9 100644
 --- a/src/zipios/CMakeLists.txt
 +++ b/src/zipios/CMakeLists.txt
 @@ -17,15 +17,25 @@ file( GLOB_RECURSE SOURCES *.cpp *.h )
@@ -63,5 +63,5 @@ index 1c135c1..9b4d039 100644
  #############################################################################
  
 -- 
-1.7.7.4
+1.8.5.3
 
