@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.7.2
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        EPUB validation library
 
 Group:          System Environment/Libraries
@@ -101,6 +101,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 
 %changelog
+* Fri May 23 2014 Petr Machata <pmachata@redhat.com> - 0.7.2-11
+- Rebuild for boost 1.55.0
+
 * Wed Mar 19 2014 Dan Horák <dan[at]danny.cz> - 0.7.2-10
 - Build with system zipios++ library (#1077716)
 
