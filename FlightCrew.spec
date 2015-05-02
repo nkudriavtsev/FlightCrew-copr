@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.7.2
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        EPUB validation library
 
 Group:          System Environment/Libraries
@@ -101,6 +101,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 
 %changelog
+* Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 0.7.2-15
+- Rebuilt for GCC 5 C++11 ABI change
+
 * Tue Jan 27 2015 Petr Machata <pmachata@redhat.com> - 0.7.2-14
 - Rebuild for boost 1.57.0
 
