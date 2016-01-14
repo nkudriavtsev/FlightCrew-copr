@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.7.2
-Release:        19%{?dist}
+Release:        20%{?dist}
 Summary:        EPUB validation library
 
 Group:          System Environment/Libraries
@@ -101,6 +101,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jan 14 2016 Jonathan Wakely <jwakely@redhat.com> - 0.7.2-20
+- Rebuilt for Boost 1.60
+
 * Thu Aug 27 2015 Jonathan Wakely <jwakely@redhat.com> - 0.7.2-19
 - Rebuilt for Boost 1.59
 
