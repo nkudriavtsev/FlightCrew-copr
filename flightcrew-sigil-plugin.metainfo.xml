@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>flightcrew-sigil-plugin</id>
+  <extends>sigil.desktop</extends>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LGPL-3.0+</project_license>
+  <name>FlightCrew epub validator plugin</name>
+  <summary>Sigil FlightCrew epub validator plugin</summary>
+  <url type="homepage">https://sigil-ebook.com/</url>
+  <updatecontact>jwrdegoede_at_gmail.com</updatecontact>
+</component>

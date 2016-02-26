@@ -1,0 +1,75 @@
+From bceb09d0d3644ae5fe5554b12bb186a402c1d58b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 19 Mar 2014 10:37:15 +0100
+Subject: [PATCH 5/7] move zipextraction under FlightCrew
+
+Move the zipextraction() function under FlightCrew directly as a preparation
+for unbundling the zipios++ library.
+---
+ src/FlightCrew/Framework/ValidateEpub.cpp                |  2 +-
+ src/{zipios/src => FlightCrew/Misc}/zipextraction.cpp    | 10 ++--------
+ src/{zipios/zipios++ => FlightCrew/Misc}/zipextraction.h |  2 +-
+ 3 files changed, 4 insertions(+), 10 deletions(-)
+ rename src/{zipios/src => FlightCrew/Misc}/zipextraction.cpp (87%)
+ rename src/{zipios/zipios++ => FlightCrew/Misc}/zipextraction.h (90%)
+
+diff --git a/src/FlightCrew/Framework/ValidateEpub.cpp b/src/FlightCrew/Framework/ValidateEpub.cpp
+index 9fde065..ecbf4e3 100644
+--- a/src/FlightCrew/Framework/ValidateEpub.cpp
++++ b/src/FlightCrew/Framework/ValidateEpub.cpp
+@@ -22,7 +22,7 @@
+ #include <stdafx.h>
+ #include <vector>
+ #include "Result.h"
+-#include <zipios++/zipextraction.h>
++#include "Misc/zipextraction.h"
+ #include "Misc/TempFolder.h"
+ #include "Misc/Utilities.h"
+ #include "Validators/Xml/WellFormedXml.h"
+diff --git a/src/zipios/src/zipextraction.cpp b/src/FlightCrew/Misc/zipextraction.cpp
+similarity index 87%
+rename from src/zipios/src/zipextraction.cpp
+rename to src/FlightCrew/Misc/zipextraction.cpp
+index 8541625..45dc494 100644
+--- a/src/zipios/src/zipextraction.cpp
++++ b/src/FlightCrew/Misc/zipextraction.cpp
+@@ -19,18 +19,12 @@
+ **
+ *************************************************************************/
+ 
+-#include "zipios++/zipios-config.h"
+-
+-#include "zipios++/meta-iostreams.h"
+ #include <memory>
+ #include <stdlib.h>
+ #include <boost/scoped_ptr.hpp>
+ 
+-#include "zipios++/zipfile.h"
+-#include "zipios++/zipinputstream.h"
+-
+-#include "zipios++/zipextraction.h"
+-#include "zipios++/fcollexceptions.h"
++#include <zipios++/zipfile.h>
++#include "Misc/zipextraction.h"
+ 
+ namespace zipios 
+ {
+diff --git a/src/zipios/zipios++/zipextraction.h b/src/FlightCrew/Misc/zipextraction.h
+similarity index 90%
+rename from src/zipios/zipios++/zipextraction.h
+rename to src/FlightCrew/Misc/zipextraction.h
+index c90a75c..20e909f 100644
+--- a/src/zipios/zipios++/zipextraction.h
++++ b/src/FlightCrew/Misc/zipextraction.h
+@@ -23,7 +23,7 @@
+ #ifndef ZIPEXTRACTION_H
+ #define ZIPEXTRACTION_H
+ 
+-#include "../../FlightCrew/Misc/BoostFilesystemUse.h"
++#include "Misc/BoostFilesystemUse.h"
+ 
+ namespace zipios 
+ {
+-- 
+2.7.1
+

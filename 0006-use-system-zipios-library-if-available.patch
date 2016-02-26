@@ -1,7 +1,7 @@
-From 0f6db6dbf37ffc27b73f347df31344f606a31127 Mon Sep 17 00:00:00 2001
+From c4f589c0b8886be4204facdfab73b799ca19052d Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
 Date: Wed, 19 Mar 2014 11:32:54 +0100
-Subject: [PATCH 12/12] use system zipios++ library if available
+Subject: [PATCH 6/7] use system zipios++ library if available
 
 ---
  CMakeLists.txt                        | 16 +++++++++++++++-
@@ -10,10 +10,10 @@ Subject: [PATCH 12/12] use system zipios++ library if available
  3 files changed, 18 insertions(+), 4 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 301ac38..13405dd 100644
+index 4a32c3f..d3fc17d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -47,6 +47,13 @@ find_package( ZLIB )
+@@ -45,6 +45,13 @@ find_package( ZLIB )
  find_package( PkgConfig )
  pkg_check_modules( XERCES xerces-c>=3.1 )
  
@@ -25,12 +25,12 @@ index 301ac38..13405dd 100644
 +endif()
 +
  # The parsing order is significant!
+ 
  if( Boost_FOUND )
-     set( BOOST_LIBS ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} )
-@@ -65,7 +72,14 @@ add_subdirectory( src/XercesExtensions )
- if( NOT ZLIB_FOUND )
+@@ -77,7 +84,14 @@ if( NOT ZLIB_FOUND )
      add_subdirectory( src/zlib )
  endif()
+ 
 -add_subdirectory( src/zipios )
 +if( NOT ZIPIOS_FOUND )
 +    add_subdirectory( src/zipios )
@@ -40,11 +40,11 @@ index 301ac38..13405dd 100644
 +    set( ZIPIOS_LIBS ${ZIPIOS_LIBRARY} )
 +    set( ZIPIOS_INCLUDE_DIRS ${ZIPIOS_INCLUDES} )
 +endif()
+ 
  if( NOT NO_TEST_EXE )
      add_subdirectory( src/googlemock )
- endif()
 diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
-index d4f322c..ab19c1c 100644
+index 81bb1e3..9ad740d 100644
 --- a/src/FlightCrew/CMakeLists.txt
 +++ b/src/FlightCrew/CMakeLists.txt
 @@ -64,7 +64,7 @@ precompiled_header( SOURCES ALL_INCLUDES ${GCC_PCH_TARGET} ${PCH_NAME} )
@@ -53,10 +53,10 @@ index d4f322c..ab19c1c 100644
                       ${CMAKE_CURRENT_SOURCE_DIR}
 -                     ../zipios 
 +                     ${ZIPIOS_INCLUDE_DIRS}
-                      ${BOOST_INCLUDE_DIRS} 
+                      ${BOOST_INCLUDE_DIRS}
                       ${XERCES_INCLUDE_DIRS}
                       ../XercesExtensions
-@@ -87,7 +87,7 @@ else()
+@@ -82,7 +82,7 @@ else()
      add_library( ${PROJECT_NAME} ${SOURCES} )
  endif()
  
@@ -79,5 +79,5 @@ index 45dc494..e856b01 100644
      ConstEntries entries = zip.entries();
      for ( ConstEntries::iterator it = entries.begin(); it != entries.end(); ++it )
 -- 
-1.8.5.3
+2.7.1
 

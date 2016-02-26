@@ -1,0 +1,74 @@
+From 1a5a7855f359e644c5981c1b1fc9f20b9e7e5139 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
+Date: Wed, 18 Jan 2012 20:41:05 +0100
+Subject: [PATCH 3/7] use system xerces-c if available
+
+---
+ CMakeLists.txt                | 10 +++++++---
+ src/FlightCrew/CMakeLists.txt |  8 +++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8cf8fa7..7f1a55d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,6 +42,8 @@ set( CMAKE_OSX_DEPLOYMENT_TARGET "10.9" )
+ 
+ find_package( Boost COMPONENTS date_time filesystem program_options regex system thread )
+ find_package( ZLIB )
++find_package( PkgConfig )
++pkg_check_modules( XERCES xerces-c>=3.1 )
+ 
+ # The parsing order is significant!
+ 
+@@ -61,9 +63,11 @@ set( Boost_REGEX_LIBRARY 1 )
+ set( Boost_SYSTEM_LIBRARY 1 )
+ set( Boost_THREAD_LIBRARY 1 )
+ 
+-add_subdirectory( src/Xerces )
+-set( XERCES_LIBRARIES Xerces )
+-set( XERCES_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/Xerces )
++if( NOT XERCES_FOUND )
++    add_subdirectory( src/Xerces )
++    set( XERCES_LIBRARIES Xerces )
++    set( XERCES_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/Xerces )
++endif()
+ 
+ add_subdirectory( src/XercesExtensions )
+ set( XERCESEXTENSIONS_LIBRARIES XercesExtensions )
+diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
+index b50ee13..81bb1e3 100644
+--- a/src/FlightCrew/CMakeLists.txt
++++ b/src/FlightCrew/CMakeLists.txt
+@@ -51,7 +51,7 @@ list( REMOVE_ITEM SOURCES ${to_remove} )
+ # creating PCH's for MSVC and GCC on Linux
+ include( ${CMAKE_SOURCE_DIR}/cmake_extras/CustomPCH.cmake )
+ set( ALL_INCLUDES ${BOOST_INCLUDE_DIRS}
+-                  ${Xerces_SOURCE_DIR}
++                  ${XERCES_INCLUDE_DIRS}
+                   ${zipios_SOURCE_DIR} )
+ set( GCC_PCH_TARGET gccPCH_fc )
+ 
+@@ -66,7 +66,7 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR}
+                      ${CMAKE_CURRENT_SOURCE_DIR}
+                      ../zipios 
+                      ${BOOST_INCLUDE_DIRS}
+-                     ../Xerces
++                     ${XERCES_INCLUDE_DIRS}
+                      ../XercesExtensions
+                      ../utf8-cpp
+                    )
+@@ -116,7 +116,9 @@ elseif( CMAKE_COMPILER_IS_GNUCXX )
+ endif()
+ 
+ # needed for correct Xerces header inclusion
+-add_definitions( -DXERCES_STATIC_LIBRARY )
++if( NOT XERCES_FOUND )
++    add_definitions( -DXERCES_STATIC_LIBRARY )
++endif()
+ 
+ #############################################################################
+ 
+-- 
+2.7.1
+

@@ -1,0 +1,70 @@
+From 1ab26639c071deda00bb8661f0cd02eaada31a33 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
+Date: Wed, 18 Jan 2012 20:39:05 +0100
+Subject: [PATCH 1/7] use system zlib if available
+
+---
+ CMakeLists.txt            |  7 ++++++-
+ src/zipios/CMakeLists.txt | 15 ++++++++++++---
+ 2 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 094c4f7..e857040 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -40,6 +40,8 @@ set( CMAKE_OSX_DEPLOYMENT_TARGET "10.9" )
+ # set( CMAKE_OSX_ARCHITECTURES "i386;x86_64" )
+ 
+ 
++find_package( ZLIB )
++
+ # The parsing order is significant!
+ 
+ add_subdirectory( src/BoostParts )
+@@ -61,7 +63,10 @@ add_subdirectory( src/XercesExtensions )
+ set( XERCESEXTENSIONS_LIBRARIES XercesExtensions )
+ set( XERCESEXTENSIONS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/XercesExtensions )
+ 
+-add_subdirectory( src/zlib )
++if( NOT ZLIB_FOUND )
++    add_subdirectory( src/zlib )
++endif()
++
+ add_subdirectory( src/zipios )
+ add_subdirectory( src/googlemock )
+ 
+diff --git a/src/zipios/CMakeLists.txt b/src/zipios/CMakeLists.txt
+index 88fdb7d..0d41f42 100644
+--- a/src/zipios/CMakeLists.txt
++++ b/src/zipios/CMakeLists.txt
+@@ -17,15 +17,24 @@ file( GLOB_RECURSE SOURCES *.cpp *.h )
+ # and the headers for the linked-to libraries
+ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
+                      ${BoostParts_SOURCE_DIR}
+-                     ${zlib_SOURCE_DIR}
+-                     ${zlib_BINARY_DIR}
+                      )
+ 
++if( ZLIB_FOUND )
++    include_directories( ${ZLIB_INCLUDE_DIRS} )
++else()
++    include_directories( ${zlib_SOURCE_DIR} ${zlib_BINARY_DIR} )
++endif()
++
+ link_directories ( ${PROJECT_BINARY_DIR}/lib )
+ 
+ add_library( ${PROJECT_NAME} ${SOURCES} )
+ 
+-target_link_libraries( ${PROJECT_NAME} zlib BoostParts )
++target_link_libraries( ${PROJECT_NAME} BoostParts )
++if( ZLIB_FOUND )
++    target_link_libraries( ${PROJECT_NAME} ${ZLIB_LIBRARIES} )
++else()
++    target_link_libraries( ${PROJECT_NAME} zlib )
++endif()
+ 
+ #############################################################################
+ 
+-- 
+2.7.1
+

@@ -1,0 +1,45 @@
+From 76d93750b5db6d06c28bf92762a0cc315614fd1e Mon Sep 17 00:00:00 2001
+From: Hans de Goede <hdegoede@redhat.com>
+Date: Thu, 25 Feb 2016 20:12:29 +0100
+Subject: [PATCH 7/7] FlightCrew-plugin: Make FlightCrew-plugin work on unix
+ systems
+
+Make FlightCrew-plugin work when installed globally on unix systems.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ src/FlightCrew-plugin/plugin.py  | 6 +-----
+ src/FlightCrew-plugin/plugin.xml | 2 +-
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/src/FlightCrew-plugin/plugin.py b/src/FlightCrew-plugin/plugin.py
+index 5cdcba2..a5c10c0 100644
+--- a/src/FlightCrew-plugin/plugin.py
++++ b/src/FlightCrew-plugin/plugin.py
+@@ -94,11 +94,7 @@ def run(bk):
+ 
+     # define FlightCrew command line parameters
+     args = []
+-    exe_path = os.path.join(SCRIPT_DIR, target, xname)
+-
+-    # ensure you have execute rights for unix based platforms
+-    if target == 'osx' or target.startswith('unx'):
+-        os.chmod(exe_path,0o744)
++    exe_path = xname
+ 
+     args.append(exe_path)
+     args.append(ebook_root)
+diff --git a/src/FlightCrew-plugin/plugin.xml b/src/FlightCrew-plugin/plugin.xml
+index dd4bcef..edcd19b 100644
+--- a/src/FlightCrew-plugin/plugin.xml
++++ b/src/FlightCrew-plugin/plugin.xml
+@@ -9,5 +9,5 @@
+ <version>0.9.1</version>
+ <autostart>true</autostart>
+ <autoclose>true</autoclose>
+-<oslist>osx</oslist>
++<oslist>osx,unx</oslist>
+ </plugin>
+-- 
+2.7.1
+

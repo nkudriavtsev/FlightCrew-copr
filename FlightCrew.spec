@@ -1,44 +1,47 @@
 Name:           FlightCrew
-Version:        0.7.2
-Release:        21%{?dist}
-Summary:        EPUB validation library
-
-Group:          System Environment/Libraries
+Version:        0.9.1
+Release:        1%{?dist}
+Summary:        EPUB validator
 License:        LGPLv3+
-URL:            http://code.google.com/p/flightcrew/
-Source0:        http://flightcrew.googlecode.com/files/%{name}-%{version}-Code.zip
-Patch1:         0001-add-versioning-information-to-the-shared-library.patch
-Patch2:         0002-fix-building-as-a-shared-library-on-Unix.patch
-Patch3:         0003-use-system-zlib-if-available.patch
-Patch4:         0004-use-system-boost-libraries-if-available.patch
-Patch5:         0005-fix-build-with-boost-1.48.patch
-Patch6:         0006-use-system-xerces-c-if-available.patch
-Patch7:         0007-install-FlightCrew-library-and-headers.patch
-Patch8:         0008-don-t-build-googlemock-when-NO_TEST_EXE-is-specified.patch
-Patch9:         0009-Add-a-FindFlightCrew.cmake-cmake-module.patch
-Patch10:        0010-allow-building-XercesExtensions-as-a-shared-lib.patch
-Patch11:        0011-move-zipextraction-under-FlightCrew.patch
-Patch12:        0012-use-system-zipios-library-if-available.patch
-
-BuildRequires:  cmake
+URL:            https://sigil-ebook.com/
+Source0:        https://github.com/Sigil-Ebook/flightcrew/releases/download/%{version}/FlightCrew-%{version}-Code.zip
+Source1:        flightcrew-sigil-plugin.metainfo.xml
+Patch1:         0001-use-system-zlib-if-available.patch
+Patch2:         0002-use-system-boost-libraries-if-available.patch
+Patch3:         0003-use-system-xerces-c-if-available.patch
+Patch4:         0004-don-t-build-googlemock-when-NO_TEST_EXE-is-specified.patch
+Patch5:         0005-move-zipextraction-under-FlightCrew.patch
+Patch6:         0006-use-system-zipios-library-if-available.patch
+Patch7:         0007-FlightCrew-plugin-Make-FlightCrew-plugin-work-on-uni.patch
+BuildRequires:  cmake libappstream-glib
 BuildRequires:  zlib-devel
 BuildRequires:  boost-devel
 BuildRequires:  xerces-c-devel >= 3.1
 BuildRequires:  zipios++-devel
 
-
 %description
-FlightCrew is a C++, cross-platform, native code epub validator.
+FlightCrew is a C++ epub validator.
 
 
-%package        devel
-Summary:        Development files for %{name}
-Group:          Development/Libraries
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+%package        sigil-plugin
+Summary:        Sigil FlightCrew epub validator plugin
+Requires:       sigil
+# Older versions of FlightCrew were directly linked into sigil, we
+# hacked up the FlightCrew build to produce a dynamic-lib to make this
+# work, but upstream never intended FlightCrew to be used this way and
+# with the plugin this is no longer necessary
+Obsoletes:      %{name} <= 0.8
+Obsoletes:      %{name}-devel <= 0.8
 
-%description    devel
-The %{name}-devel package contains libraries and header files for
-developing applications that use %{name}.
+%description    sigil-plugin
+Sigil FlightCrew epub validator plugin.
+
+
+%package        cli
+Summary:        FlightCrew cli epub validator
+
+%description    cli
+FlightCrew cli epub validator.
 
 
 %prep
@@ -50,14 +53,9 @@ developing applications that use %{name}.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
 
 # Fix EOL encoding for %%doc
-for i in COPYING*.txt ChangeLog.txt; do
+for i in COPYING*.txt ChangeLog.txt README.txt; do
     sed -i.old 's/\r//' "$i"
     touch -r "$i.old" "$i"
 done
@@ -73,34 +71,48 @@ chmod a-x src/utf8-cpp/utf8/*.h
 
 %build
 mkdir build
-cd build
-%{cmake} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_SHARED_FC=1 -DBUILD_SHARED_XE=1 -DSKIP_FC_GUI=1 -DNO_TEST_EXE=1 ..
+pushd build
+%{cmake} -DBUILD_SHARED_LIBS:BOOL=OFF -DSKIP_FC_GUI=1 -DNO_TEST_EXE=1 ..
 make %{?_smp_mflags}
+popd
 
 
 %install
-cd build
-make install DESTDIR=$RPM_BUILD_ROOT
+pushd build
+%make_install
+popd
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/sigil/plugins/%{name}
+install -p -m 755 src/FlightCrew-plugin/plugin.py \
+  $RPM_BUILD_ROOT%{_datadir}/sigil/plugins/%{name}
+install -p -m 644 src/FlightCrew-plugin/plugin.xml \
+  $RPM_BUILD_ROOT%{_datadir}/sigil/plugins/%{name}
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
+install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/appdata
+appstream-util validate-relax --nonet \
+  $RPM_BUILD_ROOT%{_datadir}/appdata/flightcrew-sigil-plugin.metainfo.xml
 
 
-%post -p /sbin/ldconfig
+%files sigil-plugin
+%doc ChangeLog.txt README.txt
+%license COPYING*.txt
+%{_bindir}/flightcrew-plugin
+%{_datadir}/appdata/flightcrew-sigil-plugin.metainfo.xml
+%{_datadir}/sigil/plugins/%{name}
 
-%postun -p /sbin/ldconfig
-
-
-%files
-%doc COPYING*.txt ChangeLog.txt
-%{_bindir}/*
-%{_libdir}/*.so.*
-
-%files devel
-%{_includedir}/%{name}/
-%{_includedir}/XercesExtensions/
-%{_libdir}/*.so
-%{_libdir}/cmake
+%files cli
+%doc ChangeLog.txt README.txt
+%license COPYING*.txt
+%{_bindir}/flightcrew-cli
 
 
 %changelog
+* Thu Feb 25 2016 Hans de Goede <hdegoede@redhat.com> - 0.9.1-1
+- Update to 0.9.1
+- No longer build as a library for use in sigil, instead
+  provide a -sigil-plugin sub-package for sigil
+- Make -sigil-plugin obsolete the old main (lib) and devel package
+- Add -cli sub-package with the cli version of FlightCrew
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.7.2-21
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 

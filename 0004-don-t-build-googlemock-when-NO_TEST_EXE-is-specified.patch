@@ -1,0 +1,28 @@
+From ef719c161b955643fc46ecbb6b75d600f16682dd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
+Date: Wed, 18 Jan 2012 20:42:27 +0100
+Subject: [PATCH 4/7] don't build googlemock when NO_TEST_EXE is specified
+
+---
+ CMakeLists.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7f1a55d..4a32c3f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -78,7 +78,10 @@ if( NOT ZLIB_FOUND )
+ endif()
+ 
+ add_subdirectory( src/zipios )
+-add_subdirectory( src/googlemock )
++
++if( NOT NO_TEST_EXE )
++    add_subdirectory( src/googlemock )
++endif()
+ 
+ add_subdirectory( src/FlightCrew )
+ set( FLIGHTCREW_LIBRARIES FlightCrew )
+-- 
+2.7.1
+

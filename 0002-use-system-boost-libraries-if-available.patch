@@ -1,30 +1,31 @@
-From f463813ea1a8c54df24d8cce2793a4bee2eddfd1 Mon Sep 17 00:00:00 2001
+From 238c7dbd411b8f2154f7d69e6be8c9ad3f23be05 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan[at]danny.cz>
 Date: Wed, 18 Jan 2012 20:40:05 +0100
-Subject: [PATCH 04/12] use system boost libraries if available
+Subject: [PATCH 2/7] use system boost libraries if available
 
 ---
- CMakeLists.txt                      | 10 +++++++++-
- src/FlightCrew-cli/CMakeLists.txt   |  2 +-
- src/FlightCrew-gui/CMakeLists.txt   |  2 +-
- src/FlightCrew/CMakeLists.txt       |  6 +++---
- src/XercesExtensions/CMakeLists.txt |  2 +-
- src/utf8-cpp/utf8/core.h            |  2 +-
- src/zipios/CMakeLists.txt           |  4 ++--
- 7 files changed, 18 insertions(+), 10 deletions(-)
+ CMakeLists.txt                       | 12 +++++++++---
+ src/FlightCrew-cli/CMakeLists.txt    |  2 +-
+ src/FlightCrew-gui/CMakeLists.txt    |  2 +-
+ src/FlightCrew-plugin/CMakeLists.txt |  2 +-
+ src/FlightCrew/CMakeLists.txt        |  6 +++---
+ src/utf8-cpp/utf8/core.h             |  2 +-
+ src/zipios/CMakeLists.txt            |  4 ++--
+ 7 files changed, 18 insertions(+), 12 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b1069d7..2f17b21 100644
+index e857040..8cf8fa7 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -42,10 +42,18 @@ set( CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.6.sdk" )
- # Universal builds for mac
- set( CMAKE_OSX_ARCHITECTURES "i386;x86_64" )
+@@ -40,11 +40,19 @@ set( CMAKE_OSX_DEPLOYMENT_TARGET "10.9" )
+ # set( CMAKE_OSX_ARCHITECTURES "i386;x86_64" )
+ 
  
 +find_package( Boost COMPONENTS date_time filesystem program_options regex system thread )
  find_package( ZLIB )
  
  # The parsing order is significant!
+ 
 -add_subdirectory( src/BoostParts )
 +if( Boost_FOUND )
 +    set( BOOST_LIBS ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} )
@@ -34,11 +35,20 @@ index b1069d7..2f17b21 100644
 +    set( BOOST_LIBS BoostParts )
 +    set( BOOST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/BoostParts )
 +endif()
+ # Set these so zipios doesn't complain.
+ set( Boost_DATE_TIME_LIBRARY 1 )
+ set( Boost_FILESYSTEM_LIBRARY 1 )
+@@ -52,8 +60,6 @@ set( Boost_PROGRAM_OPTIONS_LIBRARY 1 )
+ set( Boost_REGEX_LIBRARY 1 )
+ set( Boost_SYSTEM_LIBRARY 1 )
+ set( Boost_THREAD_LIBRARY 1 )
+-set( BOOST_LIBS BoostParts )
+-set( BOOST_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/BoostParts )
+ 
  add_subdirectory( src/Xerces )
- add_subdirectory( src/XercesExtensions )
- if( NOT ZLIB_FOUND )
+ set( XERCES_LIBRARIES Xerces )
 diff --git a/src/FlightCrew-cli/CMakeLists.txt b/src/FlightCrew-cli/CMakeLists.txt
-index 6b134e0..5a161d0 100644
+index fbdd67b..fabef5b 100644
 --- a/src/FlightCrew-cli/CMakeLists.txt
 +++ b/src/FlightCrew-cli/CMakeLists.txt
 @@ -30,7 +30,7 @@ create_source_groups( SOURCES )
@@ -51,20 +61,33 @@ index 6b134e0..5a161d0 100644
                       ${XercesExtensions_SOURCE_DIR}
                       )
 diff --git a/src/FlightCrew-gui/CMakeLists.txt b/src/FlightCrew-gui/CMakeLists.txt
-index 8d6afaf..302cd05 100644
+index 97b9d79..cb0811a 100644
 --- a/src/FlightCrew-gui/CMakeLists.txt
 +++ b/src/FlightCrew-gui/CMakeLists.txt
-@@ -67,7 +67,7 @@ create_source_groups( RAW_SOURCES )
- # and the headers for the linked-to libraries
- include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
+@@ -82,7 +82,7 @@ create_source_groups( RAW_SOURCES )
+ include_directories( BEFORE
+                      ${CMAKE_CURRENT_SOURCE_DIR}
                       ${CMAKE_CURRENT_BINARY_DIR}
 -                     ${BoostParts_SOURCE_DIR}
 +                     ${BOOST_INCLUDE_DIRS}
                       ${FlightCrew_SOURCE_DIR}
                       ${XercesExtensions_SOURCE_DIR}
                       )
+diff --git a/src/FlightCrew-plugin/CMakeLists.txt b/src/FlightCrew-plugin/CMakeLists.txt
+index 379326e..c46454f 100644
+--- a/src/FlightCrew-plugin/CMakeLists.txt
++++ b/src/FlightCrew-plugin/CMakeLists.txt
+@@ -30,7 +30,7 @@ create_source_groups( SOURCES )
+ # We need to pick up the stdafx.h file
+ # and the headers for the linked-to libraries
+ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
+-                     ${BoostParts_SOURCE_DIR}
++                     ${BOOST_INCLUDE_DIRS}
+                      ${FlightCrew_SOURCE_DIR}
+                      ${XercesExtensions_SOURCE_DIR}
+                      )
 diff --git a/src/FlightCrew/CMakeLists.txt b/src/FlightCrew/CMakeLists.txt
-index 4ce09e2..d0a33aa 100644
+index da3a796..b50ee13 100644
 --- a/src/FlightCrew/CMakeLists.txt
 +++ b/src/FlightCrew/CMakeLists.txt
 @@ -50,7 +50,7 @@ list( REMOVE_ITEM SOURCES ${to_remove} )
@@ -81,11 +104,11 @@ index 4ce09e2..d0a33aa 100644
                       ${CMAKE_CURRENT_SOURCE_DIR}
                       ../zipios 
 -                     ../BoostParts 
-+                     ${BOOST_INCLUDE_DIRS} 
++                     ${BOOST_INCLUDE_DIRS}
                       ../Xerces
                       ../XercesExtensions
                       ../utf8-cpp
-@@ -87,7 +87,7 @@ else()
+@@ -82,7 +82,7 @@ else()
      add_library( ${PROJECT_NAME} ${SOURCES} )
  endif()
  
@@ -93,19 +116,6 @@ index 4ce09e2..d0a33aa 100644
 +target_link_libraries( ${PROJECT_NAME} zipios ${BOOST_LIBS} XercesExtensions )
  
  #############################################################################
- 
-diff --git a/src/XercesExtensions/CMakeLists.txt b/src/XercesExtensions/CMakeLists.txt
-index 96310d2..1e8391f 100644
---- a/src/XercesExtensions/CMakeLists.txt
-+++ b/src/XercesExtensions/CMakeLists.txt
-@@ -17,7 +17,7 @@ file( GLOB SOURCES *.cpp *.h )
- # and the headers for the linked-to libraries
- include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
-                      ../Xerces
--                     ../BoostParts )
-+                     ${BOOST_INCLUDE_DIRS} )
- 
- link_directories ( ${PROJECT_BINARY_DIR}/lib ) 
  
 diff --git a/src/utf8-cpp/utf8/core.h b/src/utf8-cpp/utf8/core.h
 index 294aad0..1fe84cd 100755
@@ -121,7 +131,7 @@ index 294aad0..1fe84cd 100755
  namespace utf8
  {
 diff --git a/src/zipios/CMakeLists.txt b/src/zipios/CMakeLists.txt
-index 96e59c9..33d286e 100644
+index 0d41f42..db4838e 100644
 --- a/src/zipios/CMakeLists.txt
 +++ b/src/zipios/CMakeLists.txt
 @@ -16,7 +16,7 @@ file( GLOB_RECURSE SOURCES *.cpp *.h )
@@ -143,5 +153,5 @@ index 96e59c9..33d286e 100644
      target_link_libraries( ${PROJECT_NAME} ${ZLIB_LIBRARIES} )
  else()
 -- 
-1.8.5.3
+2.7.1
 
