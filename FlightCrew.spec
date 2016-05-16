@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.9.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        EPUB validator
 License:        LGPLv3+
 URL:            https://sigil-ebook.com/
@@ -106,6 +106,9 @@ appstream-util validate-relax --nonet \
 
 
 %changelog
+* Mon May 16 2016 Jonathan Wakely <jwakely@redhat.com> - 0.9.1-2
+- Rebuilt for linker errors in boost (#1331983)
+
 * Thu Feb 25 2016 Hans de Goede <hdegoede@redhat.com> - 0.9.1-1
 - Update to 0.9.1
 - No longer build as a library for use in sigil, instead
