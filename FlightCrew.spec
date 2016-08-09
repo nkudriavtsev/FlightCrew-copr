@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.9.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        EPUB validator
 License:        LGPLv3+
 URL:            https://sigil-ebook.com/
@@ -18,6 +18,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-devel
 BuildRequires:  xerces-c-devel >= 3.1
 BuildRequires:  zipios++-devel
+BuildRequires:  python3-devel
 
 %description
 FlightCrew is a C++ epub validator.
@@ -68,6 +69,8 @@ rm -rf src/googlemock
 # fix permissions
 chmod a-x src/utf8-cpp/utf8/*.h
 
+# Fix python shebang
+sed -i '1s=^#!/usr/bin/\(python\|env python\)[23]\?=#!%{__python3}=' src/FlightCrew-plugin/plugin.py
 
 %build
 mkdir build
@@ -106,6 +109,9 @@ appstream-util validate-relax --nonet \
 
 
 %changelog
+* Tue Aug 09 2016 Lumir Balhar <lbalhar@redhat.com> - 0.9.1-3
+- Added `sed` to specfile to change shebang to python3
+
 * Mon May 16 2016 Jonathan Wakely <jwakely@redhat.com> - 0.9.1-2
 - Rebuilt for linker errors in boost (#1331983)
 
