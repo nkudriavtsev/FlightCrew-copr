@@ -1,6 +1,6 @@
 Name:           FlightCrew
 Version:        0.9.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        EPUB validator
 License:        LGPLv3+
 URL:            https://sigil-ebook.com/
@@ -109,6 +109,9 @@ appstream-util validate-relax --nonet \
 
 
 %changelog
+* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 0.9.1-4
+- Rebuild for Python 3.6
+
 * Tue Aug 09 2016 Lumir Balhar <lbalhar@redhat.com> - 0.9.1-3
 - Added `sed` to specfile to change shebang to python3
 
