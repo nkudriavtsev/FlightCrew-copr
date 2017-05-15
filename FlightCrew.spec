@@ -13,6 +13,9 @@ Patch4:         0004-don-t-build-googlemock-when-NO_TEST_EXE-is-specified.patch
 Patch5:         0005-move-zipextraction-under-FlightCrew.patch
 Patch6:         0006-use-system-zipios-library-if-available.patch
 Patch7:         0007-FlightCrew-plugin-Make-FlightCrew-plugin-work-on-uni.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1450956
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=861987
+Patch8:         use_random_unique_tmp_path.patch
 BuildRequires:  cmake libappstream-glib
 BuildRequires:  zlib-devel
 BuildRequires:  boost-devel
@@ -54,6 +57,7 @@ FlightCrew cli epub validator.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 # Fix EOL encoding for %%doc
 for i in COPYING*.txt ChangeLog.txt README.txt; do
@@ -109,6 +113,9 @@ appstream-util validate-relax --nonet \
 
 
 %changelog
+* Mon May 15 2017 Dan Horák <dan[at]danny.cz> - 0.9.1-7
+- fix temp dir handling (#1450956)
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.1-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 

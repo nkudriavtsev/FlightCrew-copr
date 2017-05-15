@@ -1,0 +1,20 @@
+Description: use a random and unique temporary folder
+Author: Thomas Pierson <contact@thomaspierson.fr>
+Forwarded: no
+Last-Update: 2017-05-14
+
+--- a/src/FlightCrew/Misc/TempFolder.cpp
++++ b/src/FlightCrew/Misc/TempFolder.cpp
+@@ -63,10 +63,10 @@
+     // that on Win because it points to the drive root there
+     // instead of the system temp folder
+     // http://www.delorie.com/gnu/docs/glibc/libc_295.html
+-    fs::path main_temp_folder = fs::path( P_tmpdir );
++    fs::path main_temp_folder = fs::temp_directory_path();
+ #endif    
+ 
+-    return main_temp_folder / fs::path( FC_TEMP_FOLDER ) / fs::unique_path( UNIQUE_PATH_MODEL );
++    return main_temp_folder / fs::unique_path( UNIQUE_PATH_MODEL );
+ }
+ 
+ 
