@@ -16,12 +16,14 @@ Patch7:         0007-FlightCrew-plugin-Make-FlightCrew-plugin-work-on-uni.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1450956
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=861987
 Patch8:         use_random_unique_tmp_path.patch
-BuildRequires:  cmake libappstream-glib
+BuildRequires:  cmake
+BuildRequires:  libappstream-glib
 BuildRequires:  zlib-devel
 BuildRequires:  boost-devel
 BuildRequires:  xerces-c-devel >= 3.1
 BuildRequires:  zipios++-devel
 BuildRequires:  python3-devel
+BuildRequires:  gcc-c++
 
 %description
 FlightCrew is a C++ epub validator.
@@ -49,15 +51,7 @@ FlightCrew cli epub validator.
 
 
 %prep
-%setup -q -c
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
+%autosetup -c -p1
 
 # Fix EOL encoding for %%doc
 for i in COPYING*.txt ChangeLog.txt README.txt; do
