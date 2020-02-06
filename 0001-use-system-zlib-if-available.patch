@@ -1,5 +1,4 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9e3dfbd..979fef4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -39,6 +39,7 @@ set( CMAKE_OSX_DEPLOYMENT_TARGET "10.9" )
@@ -23,7 +22,6 @@ index 9e3dfbd..979fef4 100644
  if( NOT MINGW )
      add_subdirectory( src/googlemock )
 diff --git a/src/zipios/CMakeLists.txt b/src/zipios/CMakeLists.txt
-index 9fe9344..d6f1c4f 100644
 --- a/src/zipios/CMakeLists.txt
 +++ b/src/zipios/CMakeLists.txt
 @@ -17,15 +17,25 @@ file( GLOB_RECURSE SOURCES *.cpp *.h )
