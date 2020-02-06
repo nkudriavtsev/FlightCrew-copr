@@ -4,7 +4,7 @@ Release:        1%{?dist}
 Summary:        EPUB validator
 License:        LGPLv3+
 URL:            https://sigil-ebook.com/
-Source0:        https://github.com/Sigil-Ebook/flightcrew/releases/download/%{version}/FlightCrew-%{version}-Code.zip
+Source0:        https://github.com/Sigil-Ebook/flightcrew/archive/%{version}.tar.gz
 Source1:        flightcrew-sigil-plugin.metainfo.xml
 Patch1:         0001-use-system-zlib-if-available.patch
 Patch2:         0002-use-system-boost-libraries-if-available.patch
