@@ -51,7 +51,7 @@ FlightCrew cli epub validator.
 
 
 %prep
-%autosetup -c -p1 -u
+%autosetup -c -p1
 
 # Fix EOL encoding for %%doc
 for i in COPYING*.txt ChangeLog.txt README.txt; do
