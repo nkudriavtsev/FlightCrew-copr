@@ -1,8 +1,7 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -39,6 +39,7 @@
- set( CMAKE_OSX_DEPLOYMENT_TARGET "10.9" )
+@@ -39,6 +39,7 @@ set( CMAKE_OSX_DEPLOYMENT_TARGET "10.9" )
  # Universal builds for mac
  # set( CMAKE_OSX_ARCHITECTURES "i386;x86_64" )
  
@@ -10,8 +9,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
  
  # The parsing order is significant!
  
-@@ -61,7 +62,10 @@
- add_subdirectory( src/XercesExtensions )
+@@ -61,7 +62,10 @@ add_subdirectory( src/XercesExtensions )
  set( XERCESEXTENSIONS_LIBRARIES XercesExtensions )
  set( XERCESEXTENSIONS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/XercesExtensions )
  
@@ -26,8 +24,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 diff --git a/src/zipios/CMakeLists.txt b/src/zipios/CMakeLists.txt
 --- a/src/zipios/CMakeLists.txt
 +++ b/src/zipios/CMakeLists.txt
-@@ -17,15 +17,25 @@
- file( GLOB_RECURSE SOURCES *.cpp *.h )
+@@ -17,15 +17,25 @@ file( GLOB_RECURSE SOURCES *.cpp *.h )
  # and the headers for the linked-to libraries
  include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
                       ${BoostParts_SOURCE_DIR}
